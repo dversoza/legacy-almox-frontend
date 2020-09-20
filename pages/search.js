@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import BarracasList from "../components/BarracasList";
 import { Col, Input, InputGroup, InputGroupAddon, Row } from "reactstrap";
 
 const Search = () => {
@@ -21,7 +20,6 @@ const Search = () => {
               />
             </InputGroup>
           </div>
-          <BarracasList search={query} />
         </Col>
       </Row>
       <style jsx>
