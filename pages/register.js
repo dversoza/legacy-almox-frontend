@@ -15,35 +15,43 @@ const Register = () => {
     const email = emailRef.current.value;
     const password = pwdRef.current.value;
 
-    try {
-      const { jwt, user } = await api
-        .post(
-          "/register",
-          JSON.stringify({
-            username,
-            email,
-            password,
-          }),
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((res) => {
-          if (res.status !== 200) {
-            throw new Error("Usuário ou senha incorretos, tente novamente.");
-          }
-          return res.json();
-        });
+    await api
+      .post(
+        "/register",
+        JSON.stringify({
+          username,
+          email,
+          password,
+        }),
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then(function (res) {
+        if (res.status == 200) {
+          window.sessionStorage.setItem("jwt", res.data.jwt);
+          window.sessionStorage.setItem("user", JSON.stringify(res.data.user));
+          Router.push("/");
+        }
+      })
+      .catch(function (err) {
+        if (err.response.status == 400) {
+          setError("Usuário ou senha incorretos, tente novamente.");
+          // console.log(err.response.status);
+          // console.log(err.response.headers);
+        } else if (err.request) {
+          // console.log(err.request);
+        } else {
+          //console.log("Erro: ", err.message);
+        }
+      });
 
-      window.sessionStorage.setItem("jwt", jwt);
-      window.sessionStorage.setItem("user", JSON.stringify(user));
-      Router.push("/");
-    } catch (e) {
-      setError(e.toString());
-    }
+    window.sessionStorage.setItem("jwt", data.jwt);
+    window.sessionStorage.setItem("user", JSON.stringify(data.user));
+    Router.push("/");
   };
 
   return (
@@ -71,7 +79,7 @@ const Register = () => {
         </Button>
       </Form>
       {error && (
-        <Alert color="danger" style={{ marginTop: 20 }}>
+        <Alert color="danger" style={{ marginTop: 20, marginBottom: -5 }}>
           {error}
         </Alert>
       )}

@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import Router from "next/router";
 import api from "../services/api";
 
-import { Form, FormGroup, Label, Input, Button } from "reactstrap";
+import { Alert, Form, FormGroup, Label, Input, Button } from "reactstrap";
 
 const Login = () => {
   const idRef = useRef();
@@ -14,33 +14,37 @@ const Login = () => {
     const identifier = idRef.current.value;
     const password = pwdRef.current.value;
 
-    try {
-      const { jwt, user } = await api
-        .post(
-          "/auth/local",
-          JSON.stringify({
-            identifier,
-            password,
-          }),
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((res) => {
-          if (res.status !== 200) {
-            throw new Error("Usuário ou senha incorretos, tente novamente.");
-          }
-          return res.json();
-        });
-
-      window.sessionStorage.setItem("jwt", jwt);
-      window.sessionStorage.setItem("user", JSON.stringify(user));
-      Router.push("/");
-    } catch (e) {
-      setError(e.toString());
-    }
+    await api
+      .post(
+        "/auth/local",
+        JSON.stringify({
+          identifier,
+          password,
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then(function (res) {
+        if (res.status == 200) {
+          window.sessionStorage.setItem("jwt", res.data.jwt);
+          window.sessionStorage.setItem("user", JSON.stringify(res.data.user));
+          Router.push("/");
+        }
+      })
+      .catch(function (err) {
+        if (err.response.status == 400) {
+          setError("Usuário ou senha incorretos, tente novamente.");
+          // console.log(err.response.status);
+          // console.log(err.response.headers);
+        } else if (err.request) {
+          // console.log(err.request);
+        } else {
+          //console.log("Erro: ", err.message);
+        }
+      });
   };
 
   return (
@@ -62,7 +66,11 @@ const Login = () => {
           Entrar
         </Button>
       </Form>
-      {error && <div style={{ border: "1px red solid" }}>{error}</div>}
+      {error && (
+        <Alert color="danger" style={{ marginTop: 20, marginBottom: -5 }}>
+          {error}
+        </Alert>
+      )}
     </>
   );
 };

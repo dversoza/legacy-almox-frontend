@@ -38,7 +38,6 @@ export default function OperationForm() {
       })
       .then(function (res) {
         setProducts(res.data);
-        console.log(products);
       });
   };
 
@@ -51,7 +50,6 @@ export default function OperationForm() {
       })
       .then(function (res) {
         setVendors(res.data);
-        console.log(vendors);
       });
   };
 
