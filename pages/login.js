@@ -1,13 +1,13 @@
 import React, { useRef, useState } from "react";
 import Router from "next/router";
+import api from "../services/api";
 
 import { Form, FormGroup, Label, Input, Button } from "reactstrap";
-
-const baseURL = process.env.NEXT_PUBLIC_API_URL + "/auth/local";
 
 const Login = () => {
   const idRef = useRef();
   const pwdRef = useRef();
+
   const [error, setError] = useState("");
 
   const login = async () => {
@@ -15,21 +15,25 @@ const Login = () => {
     const password = pwdRef.current.value;
 
     try {
-      const { jwt, user } = await fetch(baseURL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          identifier,
-          password,
-        }),
-      }).then((res) => {
-        if (res.status !== 200) {
-          throw new Error("Usuário ou senha incorretos, tente novamente.");
-        }
-        return res.json();
-      });
+      const { jwt, user } = await api
+        .post(
+          "/auth/local",
+          JSON.stringify({
+            identifier,
+            password,
+          }),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          if (res.status !== 200) {
+            throw new Error("Usuário ou senha incorretos, tente novamente.");
+          }
+          return res.json();
+        });
 
       window.sessionStorage.setItem("jwt", jwt);
       window.sessionStorage.setItem("user", JSON.stringify(user));

@@ -1,9 +1,8 @@
 import React, { useRef, useState } from "react";
 import Router from "next/router";
+import api from "../services/api";
 
 import { Form, FormGroup, Label, Input, Button, Alert } from "reactstrap";
-
-const endpoint = "http://localhost:1337/auth/local/register";
 
 const Register = () => {
   const idRef = useRef();
@@ -17,22 +16,27 @@ const Register = () => {
     const password = pwdRef.current.value;
 
     try {
-      const { jwt, user } = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          email,
-          password,
-        }),
-      }).then((res) => {
-        if (res.status !== 200) {
-          throw new Error("Usuário ou senha incorretos, tente novamente.");
-        }
-        return res.json();
-      });
+      const { jwt, user } = await api
+        .post(
+          "/register",
+          JSON.stringify({
+            username,
+            email,
+            password,
+          }),
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          if (res.status !== 200) {
+            throw new Error("Usuário ou senha incorretos, tente novamente.");
+          }
+          return res.json();
+        });
 
       window.sessionStorage.setItem("jwt", jwt);
       window.sessionStorage.setItem("user", JSON.stringify(user));
