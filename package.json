@@ -1,0 +1,31 @@
+{
+  "name": "almox-control-frontend",
+  "version": "0.0.1",
+  "description": "A storage control solution.",
+  "author": {
+    "name": "Daniel Versoza Alves",
+    "email": "daniel_versoza@hotmail.com",
+    "url": "https://www.linkedin.com/in/dversoza/"
+  },
+  "dependencies": {
+    "@apollo/react-hooks": "3.1.5",
+    "@apollo/react-ssr": "3.1.5",
+    "apollo-boost": "0.4.7",
+    "axios": "^0.20.0",
+    "cli-real-favicon": "^0.0.8",
+    "express": "^4.17.1",
+    "graphql": "15.0.0",
+    "next": "^9.5.3",
+    "next-apollo": "3.1.10",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "reactstrap": "^8.5.1"
+  },
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "license": "MIT",
+  "private": true
+}
