@@ -17,7 +17,7 @@ const Register = () => {
 
     await api
       .post(
-        "/register",
+        "auth/local/register",
         JSON.stringify({
           username,
           email,
