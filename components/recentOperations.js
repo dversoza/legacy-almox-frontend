@@ -28,7 +28,6 @@ export default function RecentOperations() {
       })
       .then(function (res) {
         setOperations(res.data);
-        console.log(res.data);
       });
   };
 
@@ -51,9 +50,10 @@ export default function RecentOperations() {
               <Card key={operation.id}>
                 <CardHeader tag="h5">{operation.vendor?.name}</CardHeader>
                 <CardBody>
-                  <CardTitle>
-                    {operation.product?.name} x {operation.quantity}
-                  </CardTitle>
+                  <CardText>
+                    {operation.quantity} {operation.product.um.name} de{" "}
+                    {operation.product?.name}
+                  </CardText>
                   <CardText>
                     {operation.op} / {operation.type}
                   </CardText>

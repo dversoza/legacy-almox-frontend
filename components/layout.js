@@ -1,11 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
+import Router from "next/router";
 import Link from "next/link";
 
 import { Container, Nav, NavItem } from "reactstrap";
 
 export default function Layout(props) {
   const title = "Almox Control";
+  const [auth, setAuth] = useState();
+
+  useEffect(() => {
+    const jwt = window.sessionStorage.getItem("jwt");
+    if (!jwt) {
+      setAuth(true);
+    } else {
+      setAuth(false);
+    }
+    console.log(auth);
+  }, []);
+
+  const logout = () => {
+    window.sessionStorage.setItem("jwt", "");
+    Router.push("/");
+  };
 
   return (
     <div>
@@ -36,23 +53,38 @@ export default function Layout(props) {
             </Link>
           </NavItem>
 
-          <NavItem className="ml-auto">
-            <Link href="/new">
-              <a className="nav-link">Nova Movimentação</a>
-            </Link>
-          </NavItem>
+          {!auth && (
+            <>
+              <NavItem className="ml-auto">
+                <Link href="/new">
+                  <a className="nav-link">Nova Movimentação</a>
+                </Link>
+              </NavItem>
+              <NavItem className="ml-auto">
+                <Link href="/">
+                  <a className="nav-link" onClick={() => logout()}>
+                    Sair
+                  </a>
+                </Link>
+              </NavItem>
+            </>
+          )}
 
-          <NavItem>
-            <Link href="/login">
-              <a className="nav-link">Login</a>
-            </Link>
-          </NavItem>
+          {auth && (
+            <>
+              <NavItem>
+                <Link href="/login">
+                  <a className="nav-link">Login</a>
+                </Link>
+              </NavItem>
 
-          <NavItem>
-            <Link href="/register">
-              <a className="nav-link">Cadastro</a>
-            </Link>
-          </NavItem>
+              <NavItem>
+                <Link href="/register">
+                  <a className="nav-link">Cadastro</a>
+                </Link>
+              </NavItem>
+            </>
+          )}
         </Nav>
       </header>
       <Container

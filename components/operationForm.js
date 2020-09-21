@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import Router from "next/router";
 import api from "../services/api";
 
 import { Alert, Row, Col, FormGroup, Label, Input, Button } from "reactstrap";
@@ -23,10 +24,11 @@ export default function OperationForm() {
     const jwt = window.sessionStorage.getItem("jwt");
     if (!jwt) {
       Router.push("/login");
+    } else {
+      jwtRef.current = jwt;
+      getProducts();
+      getVendors();
     }
-    jwtRef.current = jwt;
-    getProducts();
-    getVendors();
   }, []);
 
   const getProducts = async () => {
@@ -206,7 +208,7 @@ export default function OperationForm() {
             >
               {products.map((product) => (
                 <option key={product.name}>
-                  {product.name} - Cód.: {product.id}
+                  {product.name} ({product.um.name}) - Cód.: {product.id}
                 </option>
               ))}
             </Input>

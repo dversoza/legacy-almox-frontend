@@ -56,7 +56,7 @@ const Register = () => {
 
   return (
     <>
-      <h1>Cadastrar novo usuário</h1>
+      <h2>Cadastrar novo usuário</h2>
       <Form>
         <FormGroup>
           <Label>Usuário:</Label>
