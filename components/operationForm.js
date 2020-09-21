@@ -33,7 +33,7 @@ export default function OperationForm() {
 
   const getProducts = async () => {
     await api
-      .get("/products", {
+      .get("/products?_limit=300", {
         headers: {
           Authorization: `Bearer ${jwtRef.current}`,
         },
@@ -151,7 +151,7 @@ export default function OperationForm() {
       <Row form>
         <Col md={6}>
           <FormGroup>
-            <Label for="exampleSelect">Barraca</Label>
+            <Label for="exampleSelect">Barraca (favorecida)</Label>
             <Input
               type="select"
               name="select"
@@ -208,7 +208,7 @@ export default function OperationForm() {
             >
               {products.map((product) => (
                 <option key={product.name}>
-                  {product.name} ({product.um.name}) - Cód.: {product.id}
+                  {product.name} ({product.um}) - Cód.: {product.id}
                 </option>
               ))}
             </Input>

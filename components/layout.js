@@ -12,15 +12,16 @@ export default function Layout(props) {
   useEffect(() => {
     const jwt = window.sessionStorage.getItem("jwt");
     if (!jwt) {
-      setAuth(true);
-    } else {
       setAuth(false);
+    } else {
+      setAuth(true);
     }
     console.log(auth);
   }, []);
 
   const logout = () => {
-    window.sessionStorage.setItem("jwt", "");
+    window.sessionStorage.removeItem("jwt");
+    window.sessionStorage.removeItem("user");
     Router.push("/");
   };
 
@@ -53,14 +54,19 @@ export default function Layout(props) {
             </Link>
           </NavItem>
 
-          {!auth && (
+          {auth && (
             <>
               <NavItem className="ml-auto">
                 <Link href="/new">
                   <a className="nav-link">Nova Movimentação</a>
                 </Link>
               </NavItem>
-              <NavItem className="ml-auto">
+              <NavItem className="ml-right">
+                <Link href="/register">
+                  <a className="nav-link">Cadastro</a>
+                </Link>
+              </NavItem>
+              <NavItem className="ml-right">
                 <Link href="/">
                   <a className="nav-link" onClick={() => logout()}>
                     Sair
@@ -70,20 +76,12 @@ export default function Layout(props) {
             </>
           )}
 
-          {auth && (
-            <>
-              <NavItem>
-                <Link href="/login">
-                  <a className="nav-link">Login</a>
-                </Link>
-              </NavItem>
-
-              <NavItem>
-                <Link href="/register">
-                  <a className="nav-link">Cadastro</a>
-                </Link>
-              </NavItem>
-            </>
+          {!auth && (
+            <NavItem className="ml-auto">
+              <Link href="/login">
+                <a className="nav-link">Login</a>
+              </Link>
+            </NavItem>
           )}
         </Nav>
       </header>
