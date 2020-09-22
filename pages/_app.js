@@ -19,6 +19,19 @@ class MyApp extends App {
         <Layout>
           <Component {...pageProps} />
         </Layout>
+        <footer
+          style={{
+            display: "flex",
+            flexGrow: 1,
+            alignSelf: "flex-end",
+            alignItems: "center",
+            flexDirection: "column",
+            fontSize: "10px",
+            color: "#477890",
+          }}
+        >
+          Desenvolvido por Daniel Versoza Alves
+        </footer>
       </>
     );
   }

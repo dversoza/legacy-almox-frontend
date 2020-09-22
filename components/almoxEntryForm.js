@@ -4,19 +4,19 @@ import api from "../services/api";
 
 import { Alert, Row, Col, FormGroup, Label, Input, Button } from "reactstrap";
 
-export default function OperationForm() {
+export default function AlmoxEntryForm() {
   const jwtRef = useRef();
 
   const dateRef = useRef();
   const timeRef = useRef();
-  const vendorRef = useRef();
+  const typeRef = useRef();
   const productRef = useRef();
   const quantityRef = useRef();
   const takerRef = useRef();
+  const costRef = useRef();
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [vendors, setVendors] = useState([]);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -26,9 +26,12 @@ export default function OperationForm() {
     } else {
       jwtRef.current = jwt;
       getProducts();
-      getVendors();
     }
   }, []);
+
+  useEffect(() => {
+    dateRef.current.focus();
+  });
 
   const getProducts = async () => {
     await api
@@ -42,29 +45,18 @@ export default function OperationForm() {
       });
   };
 
-  const getVendors = async () => {
-    await api
-      .get("/vendors", {
-        headers: {
-          Authorization: `Bearer ${jwtRef.current}`,
-        },
-      })
-      .then(function (res) {
-        setVendors(res.data);
-      });
-  };
-
   const createOperation = async () => {
     const user = JSON.parse(window.sessionStorage.getItem("user")).id;
     const onlyDate = dateRef.current.value;
     const onlyTime = timeRef.current.value;
     const date = onlyDate + " " + onlyTime;
-    const vendor = vendorRef.current.value.split(" - Cód.: ")[1];
-    const op = "Saida";
-    const type = "Interna";
+    const vendor = 1;
+    const op = "Entrada";
+    const type = typeRef.current.value;
     const product = productRef.current.value.split(" - Cód.: ")[1];
     const quantity = quantityRef.current.value;
     const taker = takerRef.current.value;
+    const cost = costRef.current.value;
 
     if (!onlyDate) {
       setSuccess("");
@@ -96,9 +88,9 @@ export default function OperationForm() {
           product,
           quantity,
           taker,
+          cost,
         }),
         {
-          method: "POST",
           headers: {
             Authorization: `Bearer ${jwtRef.current}`,
             "Content-Type": "application/json",
@@ -122,17 +114,15 @@ export default function OperationForm() {
 
   return (
     <>
-      <h2 style={{ margin: "20px 0 " }}>
-        Cadastrar nova saída do almoxarifado
-      </h2>
+      <h2 style={{ margin: "20px 0 " }}>Cadastrar entrada no almoxarifado</h2>
       <Row form>
         <Col md={6}>
           <FormGroup>
-            <Label for="isDate">Data</Label>
+            <Label for="exampleDate">Data</Label>
             <Input
               type="date"
               name="date"
-              id="isDate"
+              id="exampleDate"
               placeholder="date placeholder"
               innerRef={dateRef}
             />
@@ -140,11 +130,11 @@ export default function OperationForm() {
         </Col>
         <Col md={6}>
           <FormGroup>
-            <Label for="isTime">Hora</Label>
+            <Label for="exampleTime">Hora</Label>
             <Input
               type="time"
               name="time"
-              id="isTime"
+              id="exampleTime"
               placeholder="time placeholder"
               innerRef={timeRef}
             />
@@ -152,43 +142,27 @@ export default function OperationForm() {
         </Col>
       </Row>
       <Row form>
-        <Col md={6}>
+        <Col md={4}>
           <FormGroup>
-            <Label for="isSelect">Barraca</Label>
+            <Label for="exampleSelect">Tipo</Label>
             <Input
               type="select"
               name="select"
-              id="isSelect"
-              innerRef={vendorRef}
+              id="exampleSelect"
+              innerRef={typeRef}
             >
-              {vendors.map((vendor) => (
-                <option key={vendor.name}>
-                  {vendor.name} - Cód.: {vendor.id}
-                </option>
-              ))}
+              <option>Compra</option>
+              <option>Doacao</option>
             </Input>
           </FormGroup>
         </Col>
-        <Col md={6}>
+        <Col md={8}>
           <FormGroup>
-            <Label for="isSelect">Responsável</Label>
-            <Input
-              name="input"
-              id="takerInput"
-              innerRef={takerRef}
-              placeholder="Responsável pela movimentação"
-            />
-          </FormGroup>
-        </Col>
-      </Row>
-      <Row form>
-        <Col md={7}>
-          <FormGroup>
-            <Label for="isSelect">Produto</Label>
+            <Label for="exampleSelect">Produto</Label>
             <Input
               type="select"
               name="select"
-              id="isSelect"
+              id="exampleSelect"
               innerRef={productRef}
             >
               {products.map((product) => (
@@ -199,15 +173,40 @@ export default function OperationForm() {
             </Input>
           </FormGroup>
         </Col>
-        <Col md={5}>
+      </Row>
+      <Row form>
+        <Col md={2}>
           <FormGroup>
-            <Label for="isTime">Quantidade</Label>
+            <Label for="exampleTime">Quantidade</Label>
             <Input
               type="number"
               name="time"
-              id="isTime"
+              id="exampleTime"
               placeholder="Quantidade"
               innerRef={quantityRef}
+            />
+          </FormGroup>
+        </Col>
+        <Col md={4}>
+          <FormGroup>
+            <Label for="exampleTime">Valor</Label>
+            <Input
+              type="number"
+              name="cost"
+              id="valorInput"
+              placeholder="Custo total"
+              innerRef={costRef}
+            />
+          </FormGroup>
+        </Col>
+        <Col md={6}>
+          <FormGroup>
+            <Label for="isSelect">Responsável</Label>
+            <Input
+              name="input"
+              id="takerInput"
+              innerRef={takerRef}
+              placeholder="Responsável pela movimentação"
             />
           </FormGroup>
         </Col>

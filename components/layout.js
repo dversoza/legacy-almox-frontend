@@ -3,11 +3,21 @@ import Head from "next/head";
 import Router from "next/router";
 import Link from "next/link";
 
-import { Container, Nav, NavItem } from "reactstrap";
+import {
+  Container,
+  Nav,
+  NavItem,
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle,
+  Dropdown,
+} from "reactstrap";
 
 export default function Layout(props) {
   const title = "Almox Control";
   const [auth, setAuth] = useState();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggle = () => setDropdownOpen(!dropdownOpen);
 
   useEffect(() => {
     const jwt = window.sessionStorage.getItem("jwt");
@@ -16,7 +26,6 @@ export default function Layout(props) {
     } else {
       setAuth(true);
     }
-    console.log(auth);
   }, []);
 
   const logout = () => {
@@ -26,7 +35,7 @@ export default function Layout(props) {
   };
 
   return (
-    <div>
+    <>
       <Head>
         <title>{title}</title>
         <meta charSet="utf-8" />
@@ -54,18 +63,29 @@ export default function Layout(props) {
             </Link>
           </NavItem>
 
+          <NavItem className="ml-auto" style={{ color: "#fff" }}>
+            Sistema de Gestão de Almoxarifado{" "}
+          </NavItem>
+
           {auth && (
             <>
-              <NavItem className="ml-auto">
-                <Link href="/new">
-                  <a className="nav-link">Nova Movimentação</a>
-                </Link>
-              </NavItem>
-              <NavItem className="ml-right">
-                <Link href="/register">
-                  <a className="nav-link">Cadastro</a>
-                </Link>
-              </NavItem>
+              <Dropdown
+                nav
+                isOpen={dropdownOpen}
+                toggle={toggle}
+                className="ml-auto"
+              >
+                <DropdownToggle nav caret style={{ color: "#fff" }}>
+                  Cadastrar
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem href="/almox">Entrada</DropdownItem>
+                  <DropdownItem href="/new">Saída</DropdownItem>
+                  <DropdownItem divider />
+                  <DropdownItem href="/register">Usuário</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+
               <NavItem className="ml-right">
                 <Link href="/">
                   <a className="nav-link" onClick={() => logout()}>
@@ -98,6 +118,6 @@ export default function Layout(props) {
       >
         {props.children}
       </Container>
-    </div>
+    </>
   );
 }
