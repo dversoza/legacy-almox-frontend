@@ -14,8 +14,8 @@ const New = () => {
   return (
     <>
       <iframe
-        width="600"
-        height="373.5"
+        width="100%"
+        height="800"
         src="https://app.powerbi.com/view?r=eyJrIjoiNTE3ZDNkOWQtZjkyMy00NzMwLTgwNWYtZjhkNDIxNmZjMmExIiwidCI6IjFiMzEwYjVkLWNjNjgtNDM4ZS1iMTI2LTVkNjgxNGM5MTUyZiJ9"
         frameborder="0"
         allowFullScreen="true"
