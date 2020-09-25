@@ -39,11 +39,14 @@ export default function RecentOperations() {
     const vendorId = vendorRef.current.value.split(" - Cód.: ")[1];
 
     await api
-      .get(`/operations?vendor.id=${vendorId}`, {
-        headers: {
-          Authorization: `Bearer ${jwtRef.current}`,
-        },
-      })
+      .get(
+        `/operations?IsDeleted=false&_sort=date:DESC&vendor.id=${vendorId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtRef.current}`,
+          },
+        }
+      )
       .then(function (res) {
         setOperations(res.data);
       });

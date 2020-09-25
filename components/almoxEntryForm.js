@@ -189,12 +189,12 @@ export default function AlmoxEntryForm() {
         </Col>
         <Col md={4}>
           <FormGroup>
-            <Label for="exampleTime">Valor</Label>
+            <Label for="exampleTime">Custo Total</Label>
             <Input
               type="number"
               name="cost"
               id="valorInput"
-              placeholder="Custo total"
+              placeholder="ex.: 10,50"
               innerRef={costRef}
             />
           </FormGroup>

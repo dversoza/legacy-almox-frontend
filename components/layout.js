@@ -69,11 +69,16 @@ export default function Layout(props) {
 
           {auth && (
             <>
+              <NavItem className="ml-auto">
+                <Link href="/inventory">
+                  <a className="nav-link">Estoque</a>
+                </Link>
+              </NavItem>
               <Dropdown
                 nav
                 isOpen={dropdownOpen}
                 toggle={toggle}
-                className="ml-auto"
+                className="ml-right"
               >
                 <DropdownToggle nav caret style={{ color: "#fff" }}>
                   Cadastrar
@@ -81,6 +86,8 @@ export default function Layout(props) {
                 <DropdownMenu>
                   <DropdownItem href="/almox">Entrada</DropdownItem>
                   <DropdownItem href="/new">Saída</DropdownItem>
+                  <DropdownItem divider />
+                  <DropdownItem href="/products">Novo Produto</DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem href="/register">Usuário</DropdownItem>
                 </DropdownMenu>

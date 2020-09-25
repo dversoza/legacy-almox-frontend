@@ -44,7 +44,7 @@ export default function OperationForm() {
 
   const getVendors = async () => {
     await api
-      .get("/vendors", {
+      .get("/vendors?_sort=name:ASC&id_ne=1", {
         headers: {
           Authorization: `Bearer ${jwtRef.current}`,
         },
@@ -122,9 +122,7 @@ export default function OperationForm() {
 
   return (
     <>
-      <h2 style={{ margin: "20px 0 " }}>
-        Cadastrar nova saída do almoxarifado
-      </h2>
+      <h2 style={{ margin: "20px 0 " }}>Cadastrar saída do almoxarifado</h2>
       <Row form>
         <Col md={6}>
           <FormGroup>
@@ -171,12 +169,12 @@ export default function OperationForm() {
         </Col>
         <Col md={6}>
           <FormGroup>
-            <Label for="isSelect">Responsável</Label>
+            <Label for="isSelect">Responsável pela retirada</Label>
             <Input
               name="input"
               id="takerInput"
               innerRef={takerRef}
-              placeholder="Responsável pela movimentação"
+              placeholder="Nome"
             />
           </FormGroup>
         </Col>
