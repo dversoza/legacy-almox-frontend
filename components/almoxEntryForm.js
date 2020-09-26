@@ -35,7 +35,7 @@ export default function AlmoxEntryForm() {
 
   const getProducts = async () => {
     await api
-      .get("/products?_limit=300", {
+      .get("/products?_sort=name:ASC&_limit=300", {
         headers: {
           Authorization: `Bearer ${jwtRef.current}`,
         },
