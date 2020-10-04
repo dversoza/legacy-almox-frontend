@@ -7,9 +7,11 @@ import { Container, Table, Button, Input } from "reactstrap";
 export default function RecentOperations() {
   const jwtRef = useRef();
   const vendorRef = useRef();
+  const productRef = useRef();
 
   const [operations, setOperations] = useState([]);
   const [vendors, setVendors] = useState([]);
+  const [products, setProducts] = useState([]);
 
   const getOperations = async () => {
     await api
@@ -35,12 +37,41 @@ export default function RecentOperations() {
       });
   };
 
+  const getProducts = async () => {
+    await api
+      .get("/products", {
+        headers: {
+          Authorization: `Bearer ${jwtRef.current}`,
+        },
+      })
+      .then(function (res) {
+        setProducts(res.data);
+      });
+  };
+
   const handleSelectVendor = async () => {
     const vendorId = vendorRef.current.value.split(" - Cód.: ")[1];
 
     await api
       .get(
         `/operations?IsDeleted=false&_sort=date:DESC&vendor.id=${vendorId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtRef.current}`,
+          },
+        }
+      )
+      .then(function (res) {
+        setOperations(res.data);
+      });
+  };
+
+  const handleSelectProduct = async () => {
+    const productId = productRef.current.value.split(" - Cód.: ")[1];
+
+    await api
+      .get(
+        `/operations?IsDeleted=false&_sort=date:DESC&product.id=${productId}`,
         {
           headers: {
             Authorization: `Bearer ${jwtRef.current}`,
@@ -60,6 +91,7 @@ export default function RecentOperations() {
       jwtRef.current = jwt;
       getOperations();
       getVendors();
+      getProducts();
     }
   }, []);
 
@@ -112,6 +144,29 @@ export default function RecentOperations() {
             {vendors.map((vendor) => (
               <option key={vendor.name}>
                 {vendor.name} - Cód.: {vendor.id}
+              </option>
+            ))}
+          </Input>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+          }}
+        >
+          <h6>Filtrar por produto: </h6>{" "}
+          <Button close onClick={() => getOperations()} />
+          <Input
+            onInput={() => handleSelectProduct()}
+            type="select"
+            name="select"
+            id="isSelect"
+            innerRef={productRef}
+          >
+            {products.map((product) => (
+              <option key={product.name}>
+                {product.name} - Cód.: {product.id}
               </option>
             ))}
           </Input>
