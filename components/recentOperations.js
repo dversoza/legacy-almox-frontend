@@ -39,7 +39,7 @@ export default function RecentOperations() {
 
   const getProducts = async () => {
     await api
-      .get("/products", {
+      .get("/products?_sort=name:ASC&_limit=300", {
         headers: {
           Authorization: `Bearer ${jwtRef.current}`,
         },
