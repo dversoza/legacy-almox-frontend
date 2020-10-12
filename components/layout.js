@@ -86,6 +86,7 @@ export default function Layout(props) {
                 <DropdownMenu>
                   <DropdownItem href="/almox">Entrada</DropdownItem>
                   <DropdownItem href="/new">Saída</DropdownItem>
+                  <DropdownItem href="/returning">Devolução</DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem href="/products">Novo Produto</DropdownItem>
                   <DropdownItem divider />
